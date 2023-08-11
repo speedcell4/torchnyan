@@ -12,16 +12,5 @@ setup(
     author='speedcell4',
     author_email='speedcell4@gmail.com',
     python_requires='>=3.9',
-    install_requires=[
-        'numpy',
-        'einops',
-    ],
-    extras_require={
-        'dev': [
-            'aku',
-            'tqdm',
-            'pytest',
-            'hypothesis',
-        ],
-    }
+    install_requires=[],
 )

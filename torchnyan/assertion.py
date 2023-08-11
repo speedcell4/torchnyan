@@ -3,18 +3,9 @@ from torch import Tensor
 from torch.nn.utils.rnn import PackedSequence
 from torch.testing import assert_close
 
-from torchrua.core import CattedSequence
-
-__all__ = [
-    'assert_close',
-    'assert_grad_close',
-    'assert_catted_sequence_close',
-    'assert_packed_sequence_close',
-]
-
 
 def assert_grad_close(actual: Tensor, expected: Tensor, inputs, **kwargs) -> None:
-    grad = torch.rand_like(actual)
+    grad = torch.randn_like(actual)
 
     actual_grads = torch.autograd.grad(actual, inputs, grad, retain_graph=True, allow_unused=False)
     expected_grads = torch.autograd.grad(expected, inputs, grad, retain_graph=True, allow_unused=False)
@@ -23,9 +14,16 @@ def assert_grad_close(actual: Tensor, expected: Tensor, inputs, **kwargs) -> Non
         assert_close(actual=actual_grad, expected=expected_grad, **kwargs)
 
 
-def assert_catted_sequence_close(actual: CattedSequence, expected: CattedSequence, **kwargs) -> None:
-    assert_close(actual=actual.data, expected=expected.data, **kwargs)
-    assert_close(actual=actual.token_sizes, expected=expected.token_sizes, **kwargs)
+try:
+    from torchrua.core import CattedSequence
+
+
+    def assert_catted_sequence_close(actual: CattedSequence, expected: CattedSequence, **kwargs) -> None:
+        assert_close(actual=actual.data, expected=expected.data, **kwargs)
+        assert_close(actual=actual.token_sizes, expected=expected.token_sizes, **kwargs)
+
+except ModuleNotFoundError:
+    pass
 
 
 def assert_packed_sequence_close(actual: PackedSequence, expected: PackedSequence, **kwargs) -> None:
