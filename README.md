@@ -1,3 +1,3 @@
 # TorchNyan
 
-![unit tests](https://github.com/speedcell4/torch_nyan/workflows/unit%20tests/badge.svg)
+[![Unit Tests](https://github.com/speedcell4/torchnyan/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/speedcell4/torchnyan/actions/workflows/unit-tests.yml)
