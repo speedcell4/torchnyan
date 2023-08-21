@@ -19,7 +19,6 @@ if torch.cuda.is_available():
     device = torch.device('cuda:0')
 else:
     device = torch.device('cpu')
-print(f'device => {device}')
 
 tensor = torch.empty((1024, 1024), device=device)
 init.orthogonal_(tensor)

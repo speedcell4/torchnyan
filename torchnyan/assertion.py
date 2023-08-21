@@ -15,7 +15,7 @@ def assert_grad_close(actual: Tensor, expected: Tensor, inputs, **kwargs) -> Non
 
 
 try:
-    from torchrua.core import CattedSequence
+    from torchrua import CattedSequence
 
 
     def assert_catted_sequence_close(actual: CattedSequence, expected: CattedSequence, **kwargs) -> None:
