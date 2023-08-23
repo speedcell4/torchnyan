@@ -1,6 +1,7 @@
+from typing import Tuple
+
 import torch
 from torch import Tensor
-from torch.nn.utils.rnn import PackedSequence
 from torch.testing import assert_close
 
 
@@ -14,28 +15,12 @@ def assert_grad_close(actual: Tensor, expected: Tensor, inputs, **kwargs) -> Non
         assert_close(actual=actual_grad, expected=expected_grad, **kwargs)
 
 
-try:
-    from torchrua import CattedSequence
+def assert_sequence_close(actual: Tuple[Tensor, ...], expected: Tuple[Tensor, ...], **kwargs) -> None:
+    assert type(actual) == type(expected), f'{type(actual)} != {type(expected)}'
+    assert len(actual) == len(expected), f'{len(actual)} == {len(expected)}'
 
-
-    def assert_catted_sequence_close(actual: CattedSequence, expected: CattedSequence, **kwargs) -> None:
-        assert_close(actual=actual.data, expected=expected.data, **kwargs)
-        assert_close(actual=actual.token_sizes, expected=expected.token_sizes, **kwargs)
-
-except ModuleNotFoundError:
-    pass
-
-
-def assert_packed_sequence_close(actual: PackedSequence, expected: PackedSequence, **kwargs) -> None:
-    assert_close(actual=actual.data, expected=expected.data, **kwargs)
-    assert_close(actual=actual.batch_sizes, expected=expected.batch_sizes, **kwargs)
-
-    if actual.sorted_indices is None:
-        assert expected.sorted_indices is None
-    else:
-        assert_close(actual=actual.sorted_indices, expected=expected.sorted_indices, **kwargs)
-
-    if actual.unsorted_indices is None:
-        assert expected.unsorted_indices is None
-    else:
-        assert_close(actual=actual.unsorted_indices, expected=expected.unsorted_indices, **kwargs)
+    for index, (actual, expected) in enumerate(zip(actual, expected)):
+        if actual is None:
+            assert expected is None
+        else:
+            assert_close(actual=actual, expected=expected, **kwargs)
